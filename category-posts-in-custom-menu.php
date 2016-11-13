@@ -53,6 +53,7 @@ class CPCM_Manager
 	function __construct()
 	{
 		add_action( 'admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_css' ) );
+		add_action( 'admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_js' ) );
         add_filter( 'wp_edit_nav_menu_walker', array( &$this, 'cpcm_edit_nav_menu_walker' ), 1, 2 );
         add_filter( 'wp_nav_menu_objects', array( &$this, 'cpcm_replace_taxonomy_by_posts' ), 1, 2 );
         add_action( 'wp_update_nav_menu_item', array( &$this, 'cpcm_update_nav_menu_item' ), 1, 3 );  
@@ -225,6 +226,18 @@ class CPCM_Manager
 				return;
 		wp_register_style( 'cpmp_wp_admin_nav_menus_css', plugins_url( 'cpmp_wp_admin_nav_menus.css' , __FILE__ ) );
 		wp_enqueue_style( 'cpmp_wp_admin_nav_menus_css' );
+	} // function
+
+	/* 
+	* Add JS for div.cpmp-description to nav-menus.php
+	*/
+	function cpmp_wp_admin_nav_menus_js($hook)
+	{
+		// Check the hook so that the .js is only added to the .php file where we need it
+		if( 'nav-menus.php' != $hook )
+				return;
+		wp_register_script( 'cpmp_wp_admin_nav_menus_js', plugins_url( 'cpmp_wp_admin_nav_menus.js' , __FILE__ ), array( 'jquery' ) );
+		wp_enqueue_script( 'cpmp_wp_admin_nav_menus_js' );
 	} // function
 
 	/*
