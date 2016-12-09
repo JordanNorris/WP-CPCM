@@ -3,7 +3,7 @@
     Plugin Name: Category Posts in Custom Menu
     Plugin URI: http://blog.dianakoenraadt.nl/en/category-posts-in-custom-menu/
     Description: This plugin replaces selected Category links / Post Tag links / Custom taxonomy links in a Custom Menu by a list of their posts/pages.
-    Version: 1.2.0
+    Version: 1.2.3
     Author: Diana Koenraadt
     Author URI: http://www.dianakoenraadt.nl
     License: GPL2
@@ -58,7 +58,7 @@ class CPCM_Manager
         add_filter( 'wp_nav_menu_objects', array( &$this, 'cpcm_replace_taxonomy_by_posts' ), 1, 2 );
         add_action( 'wp_update_nav_menu_item', array( &$this, 'cpcm_update_nav_menu_item' ), 1, 3 );  
 		
-		add_action('wp_nav_menu_item_custom_fields', array($this, 'cpcm_wp_nav_menu_item_custom_fields'), 10, 4 );
+		add_action('wp_nav_menu_item_custom_fields', array( &$this, 'cpcm_wp_nav_menu_item_custom_fields'), 10, 4 );
 
 	} // function
 
@@ -217,18 +217,6 @@ class CPCM_Manager
 	} // function
 
 	/* 
-	* Add CSS for div.cpmp-description to nav-menus.php
-	*/
-	function cpmp_wp_admin_nav_menus_css($hook)
-	{
-		// Check the hook so that the .css is only added to the .php file where we need it
-		if( 'nav-menus.php' != $hook )
-				return;
-		wp_register_style( 'cpmp_wp_admin_nav_menus_css', plugins_url( 'cpmp_wp_admin_nav_menus.css' , __FILE__ ) );
-		wp_enqueue_style( 'cpmp_wp_admin_nav_menus_css' );
-	} // function
-
-	/* 
 	* Add JS for div.cpmp-description to nav-menus.php
 	*/
 	function cpmp_wp_admin_nav_menus_js($hook)
@@ -238,6 +226,18 @@ class CPCM_Manager
 				return;
 		wp_register_script( 'cpmp_wp_admin_nav_menus_js', plugins_url( 'cpmp_wp_admin_nav_menus.js' , __FILE__ ), array( 'jquery' ) );
 		wp_enqueue_script( 'cpmp_wp_admin_nav_menus_js' );
+	} // function
+
+	/* 
+	* Add CSS for div.cpmp-description to nav-menus.php
+	*/
+	function cpmp_wp_admin_nav_menus_css($hook)
+	{
+		// Check the hook so that the .css is only added to the .php file where we need it
+		if( 'nav-menus.php' != $hook )
+				return;
+		wp_register_style( 'cpmp_wp_admin_nav_menus_css', plugins_url( 'cpmp_wp_admin_nav_menus.css' , __FILE__ ) );
+		wp_enqueue_style( 'cpmp_wp_admin_nav_menus_css' );
 	} // function
 
 	/*
@@ -282,11 +282,11 @@ class CPCM_Manager
 		$string = str_replace( "%post_title", 	$post->post_title, 	$string);
 		$string = str_replace( "%post_excerpt", 	$post->post_excerpt, 	$string);
 		$string = str_replace( "%post_url", 	get_permalink($post->ID), 	$string);
+		$string = str_replace( "%post_status", 	$post->post_status, 	$string);
+		$string = str_replace( "%post_comment_count", 	$post->comment_count, 	$string);
 
 		$string = replace_dates($post, $string);
 
-		$string = str_replace( "%post_comment_count", 	$post->comment_count, 	$string);
-		
 		// Process custom fields last, so that users cannot override the built-in options like %post_featured_image with a custom field named "featured_image"	
 		// As reported here https://wordpress.org/support/topic/category-lastes-post-with-images?replies=7#post-7052239
 		$custom_field_keys = get_post_custom_keys($post->ID);
@@ -305,6 +305,13 @@ class CPCM_Manager
 					$string = str_replace( "%post_" . $valuet_str, $meta, $string);
 				}
 			}
+		}
+		
+		// Allow users to plug-in their own wildcards
+		// To facilitate https://wordpress.org/support/topic/show-category-post_category?replies=3
+		if (has_filter('cpcm_replace_user_wildcards'))
+		{
+			$string = apply_filters( 'cpcm_replace_user_wildcards', $string, $post );			
 		}
 		
 		// Remove remaining %post_ occurrences.
@@ -538,14 +545,18 @@ class CPCM_Manager
 		// Only inspect the values if the $_POST variable contains data (the wp_update_nav_menu_item filter is applied in three other places, without a $_POST action)
 		if ( ! empty( $_POST['menu-item-db-id'] ) ) 
 		{
-			update_post_meta( $menu_item_db_id, '_cpcm-unfold', (!empty( $_POST['menu-item-cpcm-unfold'][$menu_item_db_id]) ) );
-			update_post_meta( $menu_item_db_id, '_cpcm-orderby', (empty( $_POST['menu-item-cpcm-orderby'][$menu_item_db_id]) ? "none" : $_POST['menu-item-cpcm-orderby'][$menu_item_db_id]) );
-			update_post_meta( $menu_item_db_id, '_cpcm-order', (empty( $_POST['menu-item-cpcm-order'][$menu_item_db_id]) ? "DESC" : $_POST['menu-item-cpcm-order'][$menu_item_db_id]) );
-			update_post_meta( $menu_item_db_id, '_cpcm-item-count', (int) ($this->__empty( $_POST['menu-item-cpcm-item-count'][$menu_item_db_id]) ? "-1" : $_POST['menu-item-cpcm-item-count'][$menu_item_db_id]) );
-			update_post_meta( $menu_item_db_id, '_cpcm-item-skip', (int) ($this->__empty( $_POST['menu-item-cpcm-item-skip'][$menu_item_db_id]) ? "0" : $_POST['menu-item-cpcm-item-skip'][$menu_item_db_id]) );
-			update_post_meta( $menu_item_db_id, '_cpcm-item-titles', (empty( $_POST['menu-item-cpcm-item-titles'][$menu_item_db_id]) ? "%post_title" : $_POST['menu-item-cpcm-item-titles'][$menu_item_db_id]) );
-			update_post_meta( $menu_item_db_id, '_cpcm-remove-original-item', (empty( $_POST['menu-item-cpcm-remove-original-item'][$menu_item_db_id]) ? "always" : $_POST['menu-item-cpcm-remove-original-item'][$menu_item_db_id]) );
-			update_post_meta( $menu_item_db_id, '_cpcm-subcategories', (empty( $_POST['menu-item-cpcm-subcategories'][$menu_item_db_id]) ? "flatten" : $_POST['menu-item-cpcm-subcategories'][$menu_item_db_id]) );
+			// Only process nav_menu_items that actually had the CPCM checkbox option
+			if ($menu_item_data['menu-item-type'] == 'taxonomy')
+			{
+				update_post_meta( $menu_item_db_id, '_cpcm-unfold', (!empty( $_POST['menu-item-cpcm-unfold'][$menu_item_db_id]) ) );
+				update_post_meta( $menu_item_db_id, '_cpcm-orderby', (empty( $_POST['menu-item-cpcm-orderby'][$menu_item_db_id]) ? "none" : $_POST['menu-item-cpcm-orderby'][$menu_item_db_id]) );
+				update_post_meta( $menu_item_db_id, '_cpcm-order', (empty( $_POST['menu-item-cpcm-order'][$menu_item_db_id]) ? "DESC" : $_POST['menu-item-cpcm-order'][$menu_item_db_id]) );
+				update_post_meta( $menu_item_db_id, '_cpcm-item-count', (int) ($this->__empty( $_POST['menu-item-cpcm-item-count'][$menu_item_db_id]) ? "-1" : $_POST['menu-item-cpcm-item-count'][$menu_item_db_id]) );
+				update_post_meta( $menu_item_db_id, '_cpcm-item-skip', (int) ($this->__empty( $_POST['menu-item-cpcm-item-skip'][$menu_item_db_id]) ? "0" : $_POST['menu-item-cpcm-item-skip'][$menu_item_db_id]) );
+				update_post_meta( $menu_item_db_id, '_cpcm-item-titles', (empty( $_POST['menu-item-cpcm-item-titles'][$menu_item_db_id]) ? "%post_title" : $_POST['menu-item-cpcm-item-titles'][$menu_item_db_id]) );
+				update_post_meta( $menu_item_db_id, '_cpcm-remove-original-item', (empty( $_POST['menu-item-cpcm-remove-original-item'][$menu_item_db_id]) ? "always" : $_POST['menu-item-cpcm-remove-original-item'][$menu_item_db_id]) );
+				update_post_meta( $menu_item_db_id, '_cpcm-subcategories', (empty( $_POST['menu-item-cpcm-subcategories'][$menu_item_db_id]) ? "flatten" : $_POST['menu-item-cpcm-subcategories'][$menu_item_db_id]) );
+			}
 		} // if 
 	} // function
 
@@ -662,8 +673,14 @@ class CPCM_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit
 
 		$item_output = '';
 		parent::start_el( $item_output, $item, $depth, $args, $id );
-		
-		$position = '<p class="field-move';		 
+
+		$position = '<p class="field-move';		
+		global $wp_version;
+		if ( $wp_version >= 4.7 ) 
+		{
+			$position = '<fieldset class="field-move';
+		}
+
 		$extra = $this->get_fields( $item, $depth, $args, $id );
 		
 		 $output .= str_replace( $position, $extra . $position, $item_output );

@@ -25,6 +25,9 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+
+/* ================= The following four functions show how to extend the backend with your own controls and use them in the posts query ================= */
+
 /*
 * Custom fields to add to the Category Posts in Custom Menu container in Appearance > Menus
 */
@@ -45,6 +48,11 @@ function my_cpcm_custom_fields($item_id, $item)
 /*
 * This filter is called when the menu_item is of taxonomy type and the "Create submenu containing links to posts in this category" is checked
 * Here, you can add or modify the posts query to your liking.
+*
+* query_arr: The original get_posts query, as built by CPCM
+* menu_item: The nav_menu_item for which the query is being built. Guaranteed to have type 'taxonomy' and to have been checked as 'Replace with posts in the taxonomy'.
+*
+* Returns: the modified query-arr
 */
 function my_cpcm_filter_posts_query($query_arr, $menu_item)
 {
@@ -70,7 +78,58 @@ function sample_plugin_uninstall() {
 	delete_post_meta_by_key($nav_menu_item->db_id, '_excludeposts');
 }
 
+// Don't forget to register the required actions, filter and uninstall hook.
 add_action( 'cpcm_custom_fields', 'my_cpcm_custom_fields', 10, 2 );
 add_filter( 'cpcm_filter_posts_query', 'my_cpcm_filter_posts_query', 10, 2 );
 add_action( 'wp_update_nav_menu_item', 'sample_update_nav_menu_item', 1, 3 );  
 register_uninstall_hook( __FILE__, 'sample_plugin_uninstall' );
+
+/* ================= The following function shows how to add your own custom wildcards to the plugin ================= */
+
+/*
+* Called after all default CPCM wildcards have been processed.
+*
+* string: The post title string as processed so far.
+* post: The post whose title string it concerns.
+*
+* Returns: The modified string
+*/
+function my_cpcm_replace_user_wildcards( $string, $post )
+{
+	return str_replace( "%hello_world" , "Hello, World!", $string);
+}
+
+// Don't forget to register the required filter.
+add_filter( 'cpcm_replace_user_wildcards', 'my_cpcm_replace_user_wildcards', 10, 2);
+
+/* ================= The following function shows how to plug-in your own menu-modifying function ================= */
+
+/*
+* Called after CPCM and other plugins have modified the menu.
+*/
+function my_nav_menu_objects( $sorted_menu_items, $args ) 
+{
+	// Annotate all menu items with children with a CSS class 'menu-item-has-children'
+	$menu_items_with_children = array();
+	
+	foreach ( (array) $sorted_menu_items as $key => $menu_item ) 
+	{
+		if ($menu_item->menu_item_parent)
+		{
+			$menu_items_with_children[$menu_item->menu_item_parent] = true;
+		}
+	}
+	
+	foreach ( (array) $sorted_menu_items as $key => $menu_item ) 
+	{
+		if (isset($menu_items_with_children[$menu_item->db_id]))
+		{
+			$menu_item->classes = array_merge( $menu_item->classes, array("menu-item-has-children") );
+		}
+	}
+	
+	return $sorted_menu_items;
+}
+
+// Don't forget to register the required filter. 
+add_filter( 'wp_nav_menu_objects', 'my_nav_menu_objects', 10 /* LAST! */, 2);

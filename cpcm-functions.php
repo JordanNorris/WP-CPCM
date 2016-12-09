@@ -17,6 +17,10 @@
 */
 
 	function replace_dates($post, $string) {
+		if (!isset($post) || !isset($string) || empty($string))
+		{
+			return "";
+		}
 		
 		$format_pattern = "([a-zA-Z\s\\\\:\/,]*)";
 		
@@ -41,8 +45,6 @@
 			};
 		$string = preg_replace_callback("/\%post_date\(" . $format_pattern . "\)/", $callback, $string);
 		$string = str_replace( "%post_date", 	$post_date, 	$string);
-
-		$string = str_replace( "%post_status", 	$post->post_status, 	$string);
 
 		$post_modified_gmt = $post->post_modified_gmt;
 		$string = preg_replace("/\%post_modified_gmt\(\)/", mysql2date('F jS, Y', $post_modified_gmt), $string);	
