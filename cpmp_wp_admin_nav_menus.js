@@ -2,20 +2,31 @@
 
 	$(document).ready(function(){
 
-		$('.cpmp-description > p.description:not(:first-child)').addClass('hidden');
-
 		var toggle = function(){
 			var checked = $(this).is(':checked');
+			var container = $(this).parent().parent();
 			var items = $(this).parents('.cpmp-description').find('p.description:not(:first-child)');
 
 			if(checked) {
+				container.css('margin-bottom', '');
 				items.removeClass('hidden');
 			} else {
+				container.css('margin-bottom', 0);
 				items.addClass('hidden');
 			}
 		};
 
-		$('.cpmp-description > .field-cpcm-unfold input[type="checkbox"]').on('change', toggle).trigger('change');
+		var init = function(){
+			$('.cpmp-description > p.description:not(:first-child)').addClass('hidden');
+			$('.cpmp-description > .field-cpcm-unfold input[type="checkbox"]').off('change', toggle).on('change', toggle).trigger('change');
+		};
+
+		$(document).on('menu-item-added', function(){
+			init();
+		});
+
+		init();
+		wpNavMenu.menusChanged = false;
 
 	});
 
