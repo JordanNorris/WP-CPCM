@@ -54,7 +54,7 @@ class CPCM_Manager
 	{
 		add_action( 'admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_css' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_js' ) );
-        add_filter( 'wp_edit_nav_menu_walker', array( &$this, 'cpcm_edit_nav_menu_walker' ), 1, 2 );
+        add_filter( 'wp_edit_nav_menu_walker', array( &$this, 'cpcm_edit_nav_menu_walker' ), 20, 2 );
         add_filter( 'wp_nav_menu_objects', array( &$this, 'cpcm_replace_taxonomy_by_posts' ), 1, 2 );
         add_action( 'wp_update_nav_menu_item', array( &$this, 'cpcm_update_nav_menu_item' ), 1, 3 );  
 		
