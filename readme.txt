@@ -1,11 +1,11 @@
 === Category Posts in Custom Menu ===
 Contributors: anaid
-Donate link: http://blog.dianakoenraadt.nl/category-posts-in-custom-menu/
+Donate link: http://blog.telodelic.nl/category-posts-in-custom-menu/
 Tags: menu, category, post tag, tag, posts, dynamic, automatic, custom, taxonomy, custom taxonomy
 License: GPLv2
 Requires at least: 3.2.1
-Tested up to: 4.7
-Stable tag: 1.2.3
+Tested up to: 5.7.2
+Stable tag: 1.3.0
 
 Dynamic menus: List all posts from a category in your menu. Also works for tags, custom taxonomies as well as pages and custom post types.
 
@@ -13,7 +13,7 @@ Dynamic menus: List all posts from a category in your menu. Also works for tags,
 
 The custom menu only allows adding a <i>link</i> that leads to a list of posts and pages belonging to a taxonomy (category, tag, etc). If you want to list the posts and pages <b>themselves</b> and if you want Wordpress to do this automatically for you, then I hope you will find this plugin useful.
 
-<strong>Also works for custom taxonomies and custom post types!</strong>
+<strong>Also works for custom taxonomies and custom post types! PHP 7.0 compatible</strong>
 
 = Using it =
 Enable the plugin and go to Appearance > Menus. Create your Custom Menu. Add a taxonomy (category/tag/custom) to the menu. Next, you can choose if you would like to replace the original link (to a page that lists the items) by the posts and pages themselves.
@@ -100,6 +100,11 @@ You can see an example in the sample-cpcm-extension directory, included in the p
 
 == Upgrade Notice ==
 
+= 1.3.0 = 
+
+After a long hiatus, now compatible with WordPress 5.7.
+If you are on a WordPress version between 4.7 and 5.7.2, when encountering issues please report the WordPress version you're running.
+
 = 1.2.3 = 
 
 Now compatible with WordPress 4.7!
@@ -115,6 +120,17 @@ Bugfixes of minor issues
 
 == Changelog ==
 
+= 1.3.0 = 
+
+After a long hiatus, now compatible with WordPress 5.7.
+If you are on a WordPress version between 4.7 and 5.7.2, when encountering issues please report the WordPress version you're running.
+
+= 1.2.4 =
+
+* Rename __empty to custom_empty to suppress PHP 7.0 validation warning as reported here: https://wordpress.org/support/topic/php-7-compability-2/
+* Add another sample extension (from github)
+* Update readme to reflect that it's PHP7.0 compatible, as mentioned here: https://wordpress.org/support/topic/php-7-compability-2/
+
 = 1.2.3 =
 
 * Hide the options when 'Create submenu ...' is not checked, thanks for contribution by websevendev
@@ -124,7 +140,7 @@ Bugfixes of minor issues
 
 * Allow users to plug-in their own wildcards to facilitate https://wordpress.org/support/topic/show-category-post_category?replies=3
 * Edit readme to explain usage of the custom wp_nav_menu_item_custom_fields that several plugin authors have been using.
-* Add example implementation to the sample extension that shows how to extend the CSS classes of the menu items, as indicated here  http://blog.dianakoenraadt.nl/en/category-posts-in-custom-menu/#comment-674
+* Add example implementation to the sample extension that shows how to extend the CSS classes of the menu items
 * Unit tests
 
 = 1.2.1 =

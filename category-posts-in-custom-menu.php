@@ -1,15 +1,15 @@
 <?php
 /*
     Plugin Name: Category Posts in Custom Menu
-    Plugin URI: http://blog.dianakoenraadt.nl/en/category-posts-in-custom-menu/
+    Plugin URI: https://blog.telodelic.nl/category-posts-in-custom-menu/
     Description: This plugin replaces selected Category links / Post Tag links / Custom taxonomy links in a Custom Menu by a list of their posts/pages.
-    Version: 1.2.3
+    Version: 1.3.0
     Author: Diana Koenraadt
-    Author URI: http://www.dianakoenraadt.nl
+    Author URI: http://www.telodelic.nl
     License: GPL2
 */
 
-/*  Copyright 2012 Diana Koenraadt (email : dev7 at dianakoenraadt dot nl)
+/*  Copyright 2012 Diana Koenraadt (email : mail at telodelic dot nl)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -48,18 +48,28 @@ class CPCM_Manager
 	const VERSION = '1.2.0';
 	
 	protected $options  = null;
-	protected $defaults = array('version'     => self::VERSION);
-				
+	protected $defaults = array('version' => self::VERSION);
+
 	function __construct()
 	{
-		add_action( 'admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_css' ) );
-		add_action( 'admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_js' ) );
-        add_filter( 'wp_edit_nav_menu_walker', array( &$this, 'cpcm_edit_nav_menu_walker' ), 20, 2 );
-        add_filter( 'wp_nav_menu_objects', array( &$this, 'cpcm_replace_taxonomy_by_posts' ), 1, 2 );
-        add_action( 'wp_update_nav_menu_item', array( &$this, 'cpcm_update_nav_menu_item' ), 1, 3 );  
-		
-		add_action('wp_nav_menu_item_custom_fields', array( &$this, 'cpcm_wp_nav_menu_item_custom_fields'), 10, 4 );
+		add_action('admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_css' ) );
+		add_action('admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_js' ) );
+        add_filter('wp_nav_menu_objects', array( &$this, 'cpcm_replace_taxonomy_by_posts' ), 1, 2 );
+        add_action('wp_update_nav_menu_item', array( &$this, 'cpcm_update_nav_menu_item' ), 1, 3 );  
 
+		// https://make.wordpress.org/core/2020/02/25/wordpress-5-4-introduces-new-hooks-to-add-custom-fields-to-menu-items/
+		// For use in Appearance > Menus:
+		add_action('wp_nav_menu_item_custom_fields', array( &$this, 'cpcm_wp_nav_menu_item_custom_fields'), 10, 4 );
+		// For use via Theme > Customize:
+		// wp_nav_menu_item_custom_fields_customize_template
+
+		// No longer need to use walkers for new WordPress
+		// Only apply for old WordPress versions
+		// https://core.trac.wordpress.org/ticket/49500
+		global $wp_version;
+		if (version_compare(preg_replace("/[^0-9\.]/","",$wp_version), '5.4', '<') ) {
+			add_filter( 'wp_edit_nav_menu_walker', array( &$this, 'cpcm_edit_nav_menu_walker' ), 1, 2 );
+		}
 	} // function
 
 	function CPCM_Manager()
@@ -293,7 +303,7 @@ class CPCM_Manager
 		foreach ( (array)$custom_field_keys as $key => $value ) 
 		{
 			$valuet = trim($value);
-			if ( '_' == $valuet{0} )
+			if ( '_' == $valuet[0] )
 			continue;
 			$meta = get_post_meta($post->ID, $valuet, true);
 			$valuet_str = str_replace(' ', '_', $valuet);
@@ -530,7 +540,7 @@ class CPCM_Manager
 		return $result;
 	} // function
 
-	function __empty($string)
+	function custom_empty($string)
 	{ 
 		$string = trim($string); 
 		if(!is_numeric($string)) return empty($string); 
@@ -551,8 +561,8 @@ class CPCM_Manager
 				update_post_meta( $menu_item_db_id, '_cpcm-unfold', (!empty( $_POST['menu-item-cpcm-unfold'][$menu_item_db_id]) ) );
 				update_post_meta( $menu_item_db_id, '_cpcm-orderby', (empty( $_POST['menu-item-cpcm-orderby'][$menu_item_db_id]) ? "none" : $_POST['menu-item-cpcm-orderby'][$menu_item_db_id]) );
 				update_post_meta( $menu_item_db_id, '_cpcm-order', (empty( $_POST['menu-item-cpcm-order'][$menu_item_db_id]) ? "DESC" : $_POST['menu-item-cpcm-order'][$menu_item_db_id]) );
-				update_post_meta( $menu_item_db_id, '_cpcm-item-count', (int) ($this->__empty( $_POST['menu-item-cpcm-item-count'][$menu_item_db_id]) ? "-1" : $_POST['menu-item-cpcm-item-count'][$menu_item_db_id]) );
-				update_post_meta( $menu_item_db_id, '_cpcm-item-skip', (int) ($this->__empty( $_POST['menu-item-cpcm-item-skip'][$menu_item_db_id]) ? "0" : $_POST['menu-item-cpcm-item-skip'][$menu_item_db_id]) );
+				update_post_meta( $menu_item_db_id, '_cpcm-item-count', (int) ($this->custom_empty( $_POST['menu-item-cpcm-item-count'][$menu_item_db_id]) ? "-1" : $_POST['menu-item-cpcm-item-count'][$menu_item_db_id]) );
+				update_post_meta( $menu_item_db_id, '_cpcm-item-skip', (int) ($this->custom_empty( $_POST['menu-item-cpcm-item-skip'][$menu_item_db_id]) ? "0" : $_POST['menu-item-cpcm-item-skip'][$menu_item_db_id]) );
 				update_post_meta( $menu_item_db_id, '_cpcm-item-titles', (empty( $_POST['menu-item-cpcm-item-titles'][$menu_item_db_id]) ? "%post_title" : $_POST['menu-item-cpcm-item-titles'][$menu_item_db_id]) );
 				update_post_meta( $menu_item_db_id, '_cpcm-remove-original-item', (empty( $_POST['menu-item-cpcm-remove-original-item'][$menu_item_db_id]) ? "always" : $_POST['menu-item-cpcm-remove-original-item'][$menu_item_db_id]) );
 				update_post_meta( $menu_item_db_id, '_cpcm-subcategories', (empty( $_POST['menu-item-cpcm-subcategories'][$menu_item_db_id]) ? "flatten" : $_POST['menu-item-cpcm-subcategories'][$menu_item_db_id]) );
@@ -560,7 +570,6 @@ class CPCM_Manager
 		} // if 
 	} // function
 
-	
 	function cpcm_wp_nav_menu_item_custom_fields( $item_id, $item, $depth, $args) 
 	{		
 		$this->getOptions();
@@ -670,7 +679,7 @@ class CPCM_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit
 {
 	function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0) 
 	{
-
+		print 'start_el called';
 		$item_output = '';
 		parent::start_el( $item_output, $item, $depth, $args, $id );
 
@@ -683,11 +692,12 @@ class CPCM_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit
 
 		$extra = $this->get_fields( $item, $depth, $args, $id );
 		
-		 $output .= str_replace( $position, $extra . $position, $item_output );
+		$output .= str_replace( $position, $extra . $position, $item_output );
 	} // function
 	
 	function get_fields( $item, $depth, $args = array(), $id = 0 ) 
 	{
+		print 'get_fields called';
 		ob_start();
 
 		// conform to https://core.trac.wordpress.org/attachment/ticket/14414/nav_menu_custom_fields.patch
