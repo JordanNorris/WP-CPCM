@@ -27,7 +27,6 @@
 
 		init();
 		wpNavMenu.menusChanged = false;
-
 	});
 
 })(jQuery); // Fully reference jQuery after this point.

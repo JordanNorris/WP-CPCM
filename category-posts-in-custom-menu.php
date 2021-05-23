@@ -583,78 +583,84 @@ class CPCM_Manager
 						<input type="checkbox" id="edit-menu-item-cpcm-unfold-<?php echo $item_id; ?>" class="edit-menu-item-cpcm-unfold" name="menu-item-cpcm-unfold[<?php echo $item_id; ?>]" <?php checked( get_post_meta($item_id, "_cpcm-unfold", true), true )  ?> /> Create submenu containing links to posts<?php if ('Category' == $item->type_label) echo ' in this category'; else if (('Tag' == $item->type_label) || ('Post Tag' == $item->type_label)) echo ' with this tag'; else echo ' in this taxonomy'; ?>.
 					</label>
 				</p>
-				<p class="field-cpcm-item-count description description-thin">
-					<label for="edit-menu-item-cpcm-item-count-<?php echo $item_id; ?>">
-						<?php _e( 'Number of Posts' ); ?><br />
-						<input type="text" id="edit-menu-item-cpcm-item-count-<?php echo $item_id; ?>" class="widefat code edit-menu-item-cpcm-item-count" name="menu-item-cpcm-item-count[<?php echo $item_id; ?>]" value="<?php $item_count = get_post_meta($item_id, "_cpcm-item-count", true); echo $item_count != '' ? $item_count : '-1'; ?>" />
-					</label>
-				</p>
-				<p class="field-cpcm-item-skip description description-thin">
-					<label for="edit-menu-item-cpcm-item-skip-<?php echo $item_id; ?>">
-						<?php _e( 'Skip Posts' ); ?><br />
-						<input type="text" id="edit-menu-item-cpcm-item-skip-<?php echo $item_id; ?>" class="widefat code edit-menu-item-cpcm-item-skip" name="menu-item-cpcm-item-skip[<?php echo $item_id; ?>]" value="<?php $item_skip = get_post_meta($item_id, "_cpcm-item-skip", true); echo $item_skip != '' ? $item_skip : '0'; ?>" />
-					</label>
-				</p>
-				<p class="field-cpcm-orderby description description-thin">
-					<label for="edit-menu-item-cpcm-orderby-<?php echo $item_id; ?>">
-						<?php _e( 'Order By' ); ?><br />
-						<select id="edit-menu-item-cpcm-orderby-<?php echo $item_id; ?>" class="widefat edit-menu-item-cpcm-orderby" name="menu-item-cpcm-orderby[<?php echo $item_id; ?>]">
-							<option value="none" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "none" )  ?>><?php _e('None'); ?></option>
-							<option value="ID" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "ID" )  ?>><?php _e('ID'); ?></option>
-							<option value="author" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "author" )  ?>><?php _e('Author'); ?></option>
-							<option value="title" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "title" )  ?>><?php _e('Title'); ?></option>
-							<option value="date" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "date" )  ?>><?php _e('Date'); ?></option>
-							<option value="modified" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "modified" )  ?>><?php _e('Last Modified'); ?></option>
-							<option value="parent" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "parent" )  ?>><?php _e('Post/Page Parent ID'); ?></option>
-							<option value="rand" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "rand" )  ?>><?php _e('Random Order'); ?></option>
-							<option value="comment_count" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "comment_count" )  ?>><?php _e('Number of Comments'); ?></option>
-							<option value="menu_order" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "menu_order" ) ?>><?php _e('Menu Order'); ?></option>
-						</select>
-					</label>
-				</p>
-				<p class="field-cpcm-order description description-thin">
-					<label for="edit-menu-item-cpcm-order-<?php echo $item_id; ?>">
-						<?php _e( 'Order' ); ?><br />
-						<select id="edit-menu-item-cpcm-order-<?php echo $item_id; ?>" class="widefat edit-menu-item-cpcm-order" name="menu-item-cpcm-order[<?php echo $item_id; ?>]">
-							<option value="DESC" <?php selected( get_post_meta($item_id, "_cpcm-order", true), "DESC" )  ?>><?php _e('Descending'); ?></option>
-							<option value="ASC" <?php selected( get_post_meta($item_id, "_cpcm-order", true), "ASC" )  ?>><?php _e('Ascending'); ?></option>
-						</select>
-					</label>
-				</p>
+				<div>
+					<p class="field-cpcm-item-count description description-thin">
+						<label for="edit-menu-item-cpcm-item-count-<?php echo $item_id; ?>">
+							<?php _e( 'Number of Posts' ); ?><br />
+							<input type="text" id="edit-menu-item-cpcm-item-count-<?php echo $item_id; ?>" class="widefat code edit-menu-item-cpcm-item-count" name="menu-item-cpcm-item-count[<?php echo $item_id; ?>]" value="<?php $item_count = get_post_meta($item_id, "_cpcm-item-count", true); echo $item_count != '' ? $item_count : '-1'; ?>" />
+						</label>
+					</p>
+					<p class="field-cpcm-item-skip description description-thin">
+						<label for="edit-menu-item-cpcm-item-skip-<?php echo $item_id; ?>">
+							<?php _e( 'Skip Posts' ); ?><br />
+							<input type="text" id="edit-menu-item-cpcm-item-skip-<?php echo $item_id; ?>" class="widefat code edit-menu-item-cpcm-item-skip" name="menu-item-cpcm-item-skip[<?php echo $item_id; ?>]" value="<?php $item_skip = get_post_meta($item_id, "_cpcm-item-skip", true); echo $item_skip != '' ? $item_skip : '0'; ?>" />
+						</label>
+					</p>
+				</div>
+				<div>
+					<p class="field-cpcm-orderby description description-thin">
+						<label for="edit-menu-item-cpcm-orderby-<?php echo $item_id; ?>">
+							<?php _e( 'Order By' ); ?><br />
+							<select id="edit-menu-item-cpcm-orderby-<?php echo $item_id; ?>" class="widefat edit-menu-item-cpcm-orderby" name="menu-item-cpcm-orderby[<?php echo $item_id; ?>]">
+								<option value="none" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "none" )  ?>><?php _e('None'); ?></option>
+								<option value="ID" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "ID" )  ?>><?php _e('ID'); ?></option>
+								<option value="author" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "author" )  ?>><?php _e('Author'); ?></option>
+								<option value="title" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "title" )  ?>><?php _e('Title'); ?></option>
+								<option value="date" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "date" )  ?>><?php _e('Date'); ?></option>
+								<option value="modified" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "modified" )  ?>><?php _e('Last Modified'); ?></option>
+								<option value="parent" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "parent" )  ?>><?php _e('Post/Page Parent ID'); ?></option>
+								<option value="rand" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "rand" )  ?>><?php _e('Random Order'); ?></option>
+								<option value="comment_count" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "comment_count" )  ?>><?php _e('Number of Comments'); ?></option>
+								<option value="menu_order" <?php selected( get_post_meta($item_id, "_cpcm-orderby", true), "menu_order" ) ?>><?php _e('Menu Order'); ?></option>
+							</select>
+						</label>
+					</p>
+					<p class="field-cpcm-order description description-thin">
+						<label for="edit-menu-item-cpcm-order-<?php echo $item_id; ?>">
+							<?php _e( 'Order' ); ?><br />
+							<select id="edit-menu-item-cpcm-order-<?php echo $item_id; ?>" class="widefat edit-menu-item-cpcm-order" name="menu-item-cpcm-order[<?php echo $item_id; ?>]">
+								<option value="DESC" <?php selected( get_post_meta($item_id, "_cpcm-order", true), "DESC" )  ?>><?php _e('Descending'); ?></option>
+								<option value="ASC" <?php selected( get_post_meta($item_id, "_cpcm-order", true), "ASC" )  ?>><?php _e('Ascending'); ?></option>
+							</select>
+						</label>
+					</p>
+				</div>
 				
-				<?php if (is_taxonomy_hierarchical($item->object)) { ?>
-					<p class="field-cpcm-remove-original-item description description-thin">
-				<?php } else { ?>
-					<p class="field-cpcm-remove-original-item description description-wide">
-				<?php } ?>
-						<label for="edit-menu-item-cpcm-remove-original-item-<?php echo $item_id; ?>">
-							<?php _e( 'Remove original menu item' ); ?><br />
-							<select id="edit-menu-item-cpcm-remove-original-item-<?php echo $item_id; ?>" class="widefat edit-menu-item-cpcm-remove-original-item" name="menu-item-cpcm-remove-original-item[<?php echo $item_id; ?>]">
-								<option value="always" <?php selected( get_post_meta($item_id, "_cpcm-remove-original-item", true), "always" )  ?>><?php _e('Always'); ?></option>
-								<option value="only if empty" <?php selected( get_post_meta($item_id, "_cpcm-remove-original-item", true), "only if empty" )  ?>><?php _e('Only if there are no posts'); ?></option>
-								<option value="never" <?php selected( get_post_meta($item_id, "_cpcm-remove-original-item", true), "never" )  ?>><?php _e('Never'); ?></option>
-							</select>
-						</label>
-					</p>
-				<?php if (is_taxonomy_hierarchical($item->object)) { ?>
-					<p class="field-cpcm-subcategories description description-thin">
-						<label for="edit-menu-item-cpcm-subcategories-<?php echo $item_id; ?>">					
-							<?php 
-								if ('category' == $item->object) 
-								{
-									_e( 'Subcategory posts' ); 
-								}
-								else 
-								{
-									_e( 'Subtaxonomy posts' );	
-								} ?><br />					
-							<select id="edit-menu-item-cpcm-subcategories-<?php echo $item_id; ?>" class="widefat edit-menu-item-cpcm-subcategories" name="menu-item-cpcm-subcategories[<?php echo $item_id; ?>]">
-								<option value="flatten" <?php selected( get_post_meta($item_id, "_cpcm-subcategories", true), "flatten" )  ?>><?php _e('Include'); ?></option>
-								<option value="exclude" <?php selected( get_post_meta($item_id, "_cpcm-subcategories", true), "exclude" )  ?>><?php _e('Exclude'); ?></option>
-							</select>
-						</label>
-					</p>
-				<?php } ?>
+				<div>
+					<?php if (is_taxonomy_hierarchical($item->object)) { ?>
+						<p class="field-cpcm-remove-original-item description description-thin">
+					<?php } else { ?>
+						<p class="field-cpcm-remove-original-item description description-wide">
+					<?php } ?>
+							<label for="edit-menu-item-cpcm-remove-original-item-<?php echo $item_id; ?>">
+								<?php _e( 'Remove original menu item' ); ?><br />
+								<select id="edit-menu-item-cpcm-remove-original-item-<?php echo $item_id; ?>" class="widefat edit-menu-item-cpcm-remove-original-item" name="menu-item-cpcm-remove-original-item[<?php echo $item_id; ?>]">
+									<option value="always" <?php selected( get_post_meta($item_id, "_cpcm-remove-original-item", true), "always" )  ?>><?php _e('Always'); ?></option>
+									<option value="only if empty" <?php selected( get_post_meta($item_id, "_cpcm-remove-original-item", true), "only if empty" )  ?>><?php _e('Only if there are no posts'); ?></option>
+									<option value="never" <?php selected( get_post_meta($item_id, "_cpcm-remove-original-item", true), "never" )  ?>><?php _e('Never'); ?></option>
+								</select>
+							</label>
+						</p>
+					<?php if (is_taxonomy_hierarchical($item->object)) { ?>
+						<p class="field-cpcm-subcategories description description-thin">
+							<label for="edit-menu-item-cpcm-subcategories-<?php echo $item_id; ?>">					
+								<?php 
+									if ('category' == $item->object) 
+									{
+										_e( 'Subcategory posts' ); 
+									}
+									else 
+									{
+										_e( 'Subtaxonomy posts' );	
+									} ?><br />					
+								<select id="edit-menu-item-cpcm-subcategories-<?php echo $item_id; ?>" class="widefat edit-menu-item-cpcm-subcategories" name="menu-item-cpcm-subcategories[<?php echo $item_id; ?>]">
+									<option value="flatten" <?php selected( get_post_meta($item_id, "_cpcm-subcategories", true), "flatten" )  ?>><?php _e('Include'); ?></option>
+									<option value="exclude" <?php selected( get_post_meta($item_id, "_cpcm-subcategories", true), "exclude" )  ?>><?php _e('Exclude'); ?></option>
+								</select>
+							</label>
+						</p>
+					<?php } ?>
+				</div>
 								
 				<?php
 					do_action('cpcm_custom_fields', $item_id, $item );

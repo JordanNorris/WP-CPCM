@@ -19,8 +19,11 @@
         width: 180px;
 }
 
-
 .menu-item-settings .cpmp-description .description-wide
 {
         width: 370px;
+}
+
+.d-none {
+        display: none;
 }
