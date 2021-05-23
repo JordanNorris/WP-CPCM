@@ -1,0 +1,23 @@
+== Environment setup ==
+
+Development with VVV (varyingvagrantvagrants.org)
+Install VirtualBox: disable your virusscanner or Vagrant won't work!
+Install Vagrant for Windows.
+Follow rest of the directions at varyingvagrantvagrants.org
+
+When you've made code changes, run `vagrant up --provision`
+
+== Unit tests ==
+
+First time use, check this blog post for troubleshooting: https://tilcode.blog/2019/10/14/adding-unit-tests-to-a-wordpress-plugin-via-vvv-and-phpunit/
+
+Run the following 
+- `vagrant ssh` to access the environment that is running the WordPress development sites.
+- `mysqladmin create wordpress_test --user=wp --password=wp --host=localhost`
+- `cd /srv/www/wordpress-one` (does not show up with `ls` command but it's there!
+- `cd public_html/wp-content/plugins/category-posts-in-custom-menu/`
+- Download phpunit version 7 with wget (8 is not supported)
+	- wget -O phpunit https://phar.phpunit.de/phpunit-7.phar
+	- chmod +x phpunit
+- `./phpunit` to run the tests for the plugin
+
