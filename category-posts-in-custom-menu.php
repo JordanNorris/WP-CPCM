@@ -52,8 +52,8 @@ class CPCM_Manager
 
 	function __construct()
 	{
-		add_action('admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_css' ) );
-		add_action('admin_enqueue_scripts', array( &$this, 'cpmp_wp_admin_nav_menus_js' ) );
+		add_action('admin_enqueue_scripts', array( &$this, 'cpcm_wp_admin_nav_menus_css' ) );
+		add_action('admin_enqueue_scripts', array( &$this, 'cpcm_wp_admin_nav_menus_js' ) );
         add_filter('wp_nav_menu_objects', array( &$this, 'cpcm_replace_taxonomy_by_posts' ), 1, 2 );
         add_action('wp_update_nav_menu_item', array( &$this, 'cpcm_update_nav_menu_item' ), 1, 3 );  
 
@@ -213,7 +213,7 @@ class CPCM_Manager
 		return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
 	}
 	
-	static function cpmp_uninstall() 
+	static function cpcm_uninstall() 
 	{
 		// We're uninstalling, so delete all custom fields on nav_menu_items that the CPCM plugin added	
 		delete_post_meta_by_key($nav_menu_item->db_id, '_cpcm-unfold');
@@ -227,32 +227,32 @@ class CPCM_Manager
 	} // function
 
 	/* 
-	* Add JS for div.cpmp-description to nav-menus.php
+	* Add JS for div.cpcm-description to nav-menus.php
 	*/
-	function cpmp_wp_admin_nav_menus_js($hook)
+	function cpcm_wp_admin_nav_menus_js($hook)
 	{
 		// Check the hook so that the .js is only added to the .php file where we need it
 		if( 'nav-menus.php' != $hook )
 				return;
-		wp_register_script( 'cpmp_wp_admin_nav_menus_js', plugins_url( 'cpmp_wp_admin_nav_menus.js' , __FILE__ ), array( 'jquery' ) );
-		wp_enqueue_script( 'cpmp_wp_admin_nav_menus_js' );
+		wp_register_script( 'cpcm_wp_admin_nav_menus_js', plugins_url( 'cpcm_wp_admin_nav_menus.js' , __FILE__ ), array( 'jquery' ) );
+		wp_enqueue_script( 'cpcm_wp_admin_nav_menus_js' );
 	} // function
 
 	/* 
-	* Add CSS for div.cpmp-description to nav-menus.php
+	* Add CSS for div.cpcm-description to nav-menus.php
 	*/
-	function cpmp_wp_admin_nav_menus_css($hook)
+	function cpcm_wp_admin_nav_menus_css($hook)
 	{
 		// Check the hook so that the .css is only added to the .php file where we need it
 		if( 'nav-menus.php' != $hook )
 				return;
-		wp_register_style( 'cpmp_wp_admin_nav_menus_css', plugins_url( 'cpmp_wp_admin_nav_menus.css' , __FILE__ ) );
-		wp_enqueue_style( 'cpmp_wp_admin_nav_menus_css' );
+		wp_register_style( 'cpcm_wp_admin_nav_menus_css', plugins_url( 'cpcm_wp_admin_nav_menus.css' , __FILE__ ) );
+		wp_enqueue_style( 'cpcm_wp_admin_nav_menus_css' );
 	} // function
 
 	/*
 	* Extend Walker_Nav_Menu_Edit and use the extended class (CPCM_Walker_Nav_Menu_Edit) to add controls to nav-menus.php, 
-	* specifically a div is added with class="cpmp-description". Everything else in this extended class is unchanged with 
+	* specifically a div is added with class="cpcm-description". Everything else in this extended class is unchanged with 
 	* respect to the parent class.
 	*
 	* Note that this extension of Walker_Nav_Menu_Edit is required because there are no hooks in its start_el method.
@@ -577,7 +577,7 @@ class CPCM_Manager
 		 
 		/* BEGIN CATEGORY POSTS IN CUSTOM MENU */ 
 		if( $item->type == 'taxonomy' ) : ?>
-			<div class="cpmp-description">
+			<div class="cpcm-description">
 				<p class="field-cpcm-unfold description description-wide">
 					<label for="edit-menu-item-cpcm-unfold-<?php echo $item_id; ?>">
 						<input type="checkbox" id="edit-menu-item-cpcm-unfold-<?php echo $item_id; ?>" class="edit-menu-item-cpcm-unfold" name="menu-item-cpcm-unfold[<?php echo $item_id; ?>]" <?php checked( get_post_meta($item_id, "_cpcm-unfold", true), true )  ?> /> Create submenu containing links to posts<?php if ('Category' == $item->type_label) echo ' in this category'; else if (('Tag' == $item->type_label) || ('Post Tag' == $item->type_label)) echo ' with this tag'; else echo ' in this taxonomy'; ?>.
@@ -714,6 +714,6 @@ class CPCM_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit
 } // class
 
 // Register the uninstall hook. Should be done after the class has been defined.
-register_uninstall_hook( __FILE__, array( 'CPCM_Manager', 'cpmp_uninstall' ) );
+register_uninstall_hook( __FILE__, array( 'CPCM_Manager', 'cpcm_uninstall' ) );
 
 ?>

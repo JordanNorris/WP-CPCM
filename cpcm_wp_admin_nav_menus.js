@@ -5,7 +5,7 @@
 		var toggle = function(){
 			var checked = $(this).is(':checked');
 			var container = $(this).parent().parent();
-			var items = $(this).parents('.cpmp-description').find('p.description:not(.field-cpcm-unfold)');
+			var items = $(this).parents('.cpcm-description').find('p.description:not(.field-cpcm-unfold)');
 
 			if(checked) {
 				container.css('margin-bottom', '');
@@ -17,8 +17,8 @@
 		};
 
 		var init = function(){
-			$('.cpmp-description > p.description:not(.field-cpcm-unfold)').addClass('d-none');
-			$('.cpmp-description > .field-cpcm-unfold input[type="checkbox"]').off('change', toggle).on('change', toggle).trigger('change');
+			$('.cpcm-description > p.description:not(.field-cpcm-unfold)').addClass('d-none');
+			$('.cpcm-description > .field-cpcm-unfold input[type="checkbox"]').off('change', toggle).on('change', toggle).trigger('change');
 		};
 
 		$(document).on('menu-item-added', function(){

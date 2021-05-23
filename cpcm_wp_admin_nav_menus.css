@@ -1,4 +1,4 @@
-.menu-item-settings .cpmp-description
+.menu-item-settings .cpcm-description
 {
         float: left;
         margin: 0 10px 0 0;
@@ -7,19 +7,19 @@
         border: 1px solid #DFDFDF;
 }
 
-.menu-item-settings .cpmp-description .description-thirds
+.menu-item-settings .cpcm-description .description-thirds
 {
         float: left;
         width: 110px;
         margin-right: 10px;
 }
 
-.menu-item-settings .cpmp-description .description-thin
+.menu-item-settings .cpcm-description .description-thin
 {
         width: 180px;
 }
 
-.menu-item-settings .cpmp-description .description-wide
+.menu-item-settings .cpcm-description .description-wide
 {
         width: 370px;
 }
