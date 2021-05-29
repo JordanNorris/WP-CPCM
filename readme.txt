@@ -3,7 +3,7 @@ Contributors: anaid
 Donate link: http://blog.telodelic.nl/category-posts-in-custom-menu/
 Tags: menu, category, post tag, tag, posts, dynamic, automatic, custom, taxonomy, custom taxonomy
 License: GPLv2
-Requires at least: 3.2.1
+Requires at least: 5.0.0
 Tested up to: 5.7.2
 Stable tag: 1.3.0
 
@@ -285,9 +285,13 @@ Here's a walkthrough:
 
 If you now look at your blog, you will have a menu with only one item: "Category A". If you hover over that item with the mouse, it will open, and a post is displayed titled "Post 1". Add additional posts to Category A and you will see these additional posts in the menu.
 
-= Missing CSS classes =
+= Can't have more than 80/90 items in the menu =
 
-The CSS class 'current-post-ancestor' is not applied correctly. This is a bug in WordPress that I have reported here: https://core.trac.wordpress.org/ticket/32918 This is not something I am able to fix in the plugin, it has to be fixed in WordPress. I'm sorry for the inconvenience.
+If your menu does not show more than about 80 or 90 items, this is not caused by my plugin or by WordPress itself. It is a server configuration issue.
+
+Try to increase the value of the max_input_vars variable in php.ini. The default is 1000, you may have success doubling this value, to 2000.
+
+Please note: Have this many items in your menu is a performance hit as well as a potential usability issue for your users.
 
 = Performance issues =
 
@@ -309,19 +313,8 @@ The solution would be to cache the menu using transients, as reported here https
 > 
 > echo $my_cached_menu;
 
-= Compatibilty =
-
-When another plugin or theme, other than CPCM, has a higher priority than CPCM and overwrite sthe fields in Appearances > Menus, this means CPCM's fields won't show. (Verify by disabling all plugins and check if the CPCM fields now show.)
-
-There is no way to go around this with native Wordpress hooks. A proposed solution is for all plugin and theme users to start calling and using a custom hook. CPCM does this. The proposed hook is `wp_nav_menu_item_custom_fields`. Several plugin authors are using this hook. If another plugin is not compatible, contact the author and request they start using this hook. Also see https://core.trac.wordpress.org/ticket/18584#comment:62
-
 = Can't see it working in any way =
 
 Problem: "I can't see what effect it has had. Nothing has changed (not that I can see) in the Appearance > Menu page. Just like before." 
 
-This problem should only occur if:
-<ul>
-<li>Your Wordpress version is 3.0 or before: Issue 14527 (http://core.trac.wordpress.org/ticket/14527) may be the cause. When adding a menu item but <i>before</i> saving it, you will indeed see none of the promised checkboxes. So be sure to <b>save your menu</b> after you add a Category/Tag to your menu. <i>Then</i> you'll see the added functionality. Please update your Wordpress version to at least 3.0.1.</li>
-<li>You're using an old version of Category Posts in Custom Menu. Please update to the latest version of CPCM.</li>
-<li>Other theme or plugin conflicts. Please disable all themes and plugins except CPCM; verify that the CPCM fields show; enable other plugins and themes one by one to determine which plugin/theme conflicts with CPCM.</li>
-</ul>
+If you are using a recent version of category Posts in Custom Menu and an updated version of WordPress, the problem can only occur due to your theme or other plugins conflicting with Category Posts in Custom Menu. Please disable all themes and plugins except CPCM; verify that the CPCM fields show; enable other plugins and themes one by one to determine which plugin/theme conflicts with CPCM. 
