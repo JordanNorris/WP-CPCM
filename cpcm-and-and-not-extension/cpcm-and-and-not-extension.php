@@ -1,15 +1,15 @@
 <?php
 /*
     Plugin Name: CPCM Extension AND/AND NOT category
-    Plugin URI: http://blog.dianakoenraadt.nl/en/category-posts-in-custom-menu/
+    Plugin URI: https://blog.telodelic.nl/category-posts-in-custom-menu/
     Description: Sample extension, at the request of joah.nl
     Version: 0.1
     Author: Diana Koenraadt
-    Author URI: http://www.dianakoenraadt.nl
+    Author URI: http://www.telodelic.nl
     License: GPL2
 */
 
-/*  Copyright 2016 Diana Koenraadt (email : dev7 at dianakoenraadt dot nl)
+/*  Copyright 2016 Diana Koenraadt (email : mail at telodelic dot nl)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 

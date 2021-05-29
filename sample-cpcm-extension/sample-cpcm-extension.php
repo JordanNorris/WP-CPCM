@@ -1,15 +1,15 @@
 <?php
 /*
     Plugin Name: Sample CPCM Extension
-    Plugin URI: http://blog.dianakoenraadt.nl/en/category-posts-in-custom-menu/
+    Plugin URI: https://blog.telodelic.nl/category-posts-in-custom-menu/
     Description: This plugin shows how to extend Category Posts in Custom Menu with your own options
     Version: 0.1
     Author: Diana Koenraadt
-    Author URI: http://www.dianakoenraadt.nl
+    Author URI: http://www.telodelic.nl
     License: GPL2
 */
 
-/*  Copyright 2015 Diana Koenraadt (email : dev7 at dianakoenraadt dot nl)
+/*  Copyright 2015 Diana Koenraadt (email : mail at telodelic dot nl)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
