@@ -274,7 +274,6 @@ class CPCM_Manager
 		$string = str_replace( "%post_author", 	$userdata ? $userdata->data->display_name : '', $string);
 
 		$thumb_image = wp_get_attachment_thumb_url( get_post_thumbnail_id($post->ID) );
-		$string = str_replace( "%post_feat_image_thumb", 	$thumb_image, $string); // deprecated
 		$string = str_replace( "%post_featured_image_thumb_url", 	$thumb_image, $string);
 		if (trim($thumb_image) == true)
 		{
@@ -282,7 +281,6 @@ class CPCM_Manager
 		}
 		
 		$featured_image = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
-		$string = str_replace( "%post_feat_image", 	$featured_image, $string); // deprecated
 		$string = str_replace( "%post_featured_image_url", 	$featured_image, $string);
 		if (trim($featured_image) == true)
 		{
