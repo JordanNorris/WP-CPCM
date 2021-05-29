@@ -200,19 +200,7 @@ class CPCM_Manager
 
 		return $this->options;
 	}
-	
-	static function startsWith($haystack, $needle) 
-	{
-		// search backwards starting from haystack length characters from the end
-		return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
-	}
-	
-	static function endsWith($haystack, $needle) 
-	{
-		// search forward starting from end minus needle length characters
-		return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
-	}
-	
+		
 	static function cpcm_uninstall() 
 	{
 		// We're uninstalling, so delete all custom fields on nav_menu_items that the CPCM plugin added	
