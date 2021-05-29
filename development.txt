@@ -6,6 +6,7 @@ Install Vagrant for Windows.
 Follow rest of the directions at varyingvagrantvagrants.org
 
 When you've made code changes, run `vagrant up --provision`
+Access development site at one.wordpress.test
 
 == Unit tests ==
 
