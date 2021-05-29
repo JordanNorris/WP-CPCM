@@ -683,7 +683,6 @@ class CPCM_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit
 {
 	function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0) 
 	{
-		print 'start_el called';
 		$item_output = '';
 		parent::start_el( $item_output, $item, $depth, $args, $id );
 
@@ -701,7 +700,6 @@ class CPCM_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit
 	
 	function get_fields( $item, $depth, $args = array(), $id = 0 ) 
 	{
-		print 'get_fields called';
 		ob_start();
 
 		// conform to https://core.trac.wordpress.org/attachment/ticket/14414/nav_menu_custom_fields.patch
